@@ -38,8 +38,38 @@ class RegisterController extends GetxController {
       return false;
     }
 
+    // ✅ Email validation
+    if (!emailController.text.contains("@") ||
+        !emailController.text.contains(".")) {
+      showError("Enter a valid email address");
+      return false;
+    }
+
     if (passwordController.text.isEmpty) {
       showError("Password is required");
+      return false;
+    }
+
+    // ✅ Password validation
+    String password = passwordController.text;
+
+    if (password.length < 10) {
+      showError("Password must be at least 10 characters long");
+      return false;
+    }
+
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      showError("Password must contain at least one uppercase letter");
+      return false;
+    }
+
+    if (!RegExp(r'[0-9]').hasMatch(password)) {
+      showError("Password must contain at least one number");
+      return false;
+    }
+
+    if (!RegExp(r'[!@#\$%^&*(),.?":{}|<>]').hasMatch(password)) {
+      showError("Password must contain at least one special character");
       return false;
     }
 

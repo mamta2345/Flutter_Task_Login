@@ -6,7 +6,7 @@ class CustomInputField extends StatelessWidget {
   final String label;
   final String hint;
   final IconData prefixIcon;
-  final RxBool? obscureText; // 👈 yaha RxBool dena hoga agar eye icon chahiye
+  final RxBool? obscureText; // 👈 agar password field hoga to ye milega
   final VoidCallback? onToggle;
 
   CustomInputField({
@@ -15,15 +15,24 @@ class CustomInputField extends StatelessWidget {
     required this.label,
     required this.hint,
     required this.prefixIcon,
-
     this.obscureText,
     this.onToggle,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Agar password field hai (obscureText != null), to Obx lagayenge
+    if (obscureText != null) {
+      return Obx(() => _buildTextField(obscureText!.value));
+    } else {
+      return _buildTextField(false);
+    }
+  }
+
+  Widget _buildTextField(bool isObscure) {
     return TextFormField(
       controller: controller,
+      obscureText: isObscure, // 👈 yaha bind karna jaruri tha
       style: const TextStyle(color: Colors.black),
       decoration: InputDecoration(
         labelText: label,
@@ -34,7 +43,7 @@ class CustomInputField extends StatelessWidget {
         suffixIcon: obscureText != null
             ? IconButton(
                 icon: Icon(
-                  obscureText!.value ? Icons.visibility_off : Icons.visibility,
+                  isObscure ? Icons.visibility_off : Icons.visibility,
                   color: Colors.grey,
                 ),
                 onPressed: onToggle,
